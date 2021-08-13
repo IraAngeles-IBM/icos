@@ -11,6 +11,11 @@ using Microsoft.Extensions.Options;
 using System.Text;
 using System.Data;
 
+using Amazon;
+using Amazon.S3;
+using Amazon.S3.Model;
+using Amazon.S3.Util;
+
 namespace fileUpload.Controllers
 {
     [ApiController]
@@ -25,6 +30,18 @@ namespace fileUpload.Controllers
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly IWebHostEnvironment _environment;
 
+        //-- Add Amazon Object storage here --//
+
+        const string bucketName = "dotnet-icos";
+
+        public static AmazonS3Config S3Config = new AmazonS3Config
+        {
+            ServiceURL = "s3.private.jp-tok.cloud-object-storage.appdomain.cloud"
+        };
+
+        const string accessKeyId = "b07bdb7f374648da93727ec216015387";
+        const string secretAccessKey = "564b2e8ab4d2dcc11343ee3d8350a92d0e27ddab7400e5e0";
+        public static IAmazonS3 s3Client;
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger, IWebHostEnvironment IWebHostEnvironment)
         {
@@ -36,6 +53,8 @@ namespace fileUpload.Controllers
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();
+            Console.WriteLine("Get Weather Forecast");
+
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
@@ -51,6 +70,8 @@ namespace fileUpload.Controllers
             int ret = 0;
             var file = formfile;
 
+            Console.WriteLine("Writing an object");
+
             if (file.Length > 0)
             {
                 foreach (var f in Request.Form.Files)
@@ -64,15 +85,33 @@ namespace fileUpload.Controllers
 
                     var fullPath = Path.Combine(_environment.WebRootPath, folder) + $@"\{fileName}";
 
-                    using (FileStream fs = System.IO.File.Create(fullPath))
-                    {
-                        f.CopyTo(fs);
-                        fs.Flush();
-                    }
+                    // using (FileStream fs = System.IO.File.Create(fullPath))
+                    // {
+                    //     f.CopyTo(fs);
+                    //     fs.Flush();
+                    // }
 
                     //-- Add Amazon Object storage here --//
 
+                    AmazonS3Client s3Client = new AmazonS3Client(accessKeyId , secretAccessKey ,S3Config);
+
                     //-- End Amazon Object storage here --//
+
+                    PutObjectRequest objectRequest = new PutObjectRequest()
+                    {
+                        // FilePath = "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos/fileUpload/fileUpload/test.png",
+                        ContentBody = "this is a test",
+                        // FilePath = fullPath,
+                        // BucketName = bucketName,
+                        BucketName = "dotnet-icos",
+                        Key = "test"
+                    };
+
+                    
+                    s3Client.PutObjectAsync(objectRequest);
+                    
+
+
                 }
 
             }

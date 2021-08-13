@@ -1,15 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "BWAJ99a8hgciRGo2qSPx/0wBfbOKknr1o5/wmdi6JpLUlwe+kx6zgMZQGgMUxxD8TGafge33tKJ1wsrOIq6eNg==",
+  "dgSpecHash": "vbiPblQsYh2JeY7SzcjeHu9tXFarjibZwlVAttTPR6kQAypWR/1CNEdgs5l8q3sw3b6XynuBgYyhElitej+K9w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Ben\\source\\repos\\fileUpload\\fileUpload\\fileUpload.csproj",
+  "projectFilePath": "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos/fileUpload/fileUpload/fileUpload.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Ben\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
-    "C:\\Users\\Ben\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
-    "C:\\Users\\Ben\\.nuget\\packages\\swashbuckle.aspnetcore\\5.6.3\\swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
-    "C:\\Users\\Ben\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\5.6.3\\swashbuckle.aspnetcore.swagger.5.6.3.nupkg.sha512",
-    "C:\\Users\\Ben\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\5.6.3\\swashbuckle.aspnetcore.swaggergen.5.6.3.nupkg.sha512",
-    "C:\\Users\\Ben\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\5.6.3\\swashbuckle.aspnetcore.swaggerui.5.6.3.nupkg.sha512"
+    "/Users/isaias/.nuget/packages/awssdk.core/3.7.2.2/awssdk.core.3.7.2.2.nupkg.sha512",
+    "/Users/isaias/.nuget/packages/awssdk.s3/3.7.1.22/awssdk.s3.3.7.1.22.nupkg.sha512",
+    "/Users/isaias/.nuget/packages/microsoft.extensions.apidescription.server/3.0.0/microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "/Users/isaias/.nuget/packages/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",
+    "/Users/isaias/.nuget/packages/swashbuckle.aspnetcore/5.6.3/swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
+    "/Users/isaias/.nuget/packages/swashbuckle.aspnetcore.swagger/5.6.3/swashbuckle.aspnetcore.swagger.5.6.3.nupkg.sha512",
+    "/Users/isaias/.nuget/packages/swashbuckle.aspnetcore.swaggergen/5.6.3/swashbuckle.aspnetcore.swaggergen.5.6.3.nupkg.sha512",
+    "/Users/isaias/.nuget/packages/swashbuckle.aspnetcore.swaggerui/5.6.3/swashbuckle.aspnetcore.swaggerui.5.6.3.nupkg.sha512"
   ],
   "logs": []
 }
