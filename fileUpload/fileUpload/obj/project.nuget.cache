@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "vbiPblQsYh2JeY7SzcjeHu9tXFarjibZwlVAttTPR6kQAypWR/1CNEdgs5l8q3sw3b6XynuBgYyhElitej+K9w==",
+  "dgSpecHash": "fnA3IzqtaHcIvuShlZjeG5cO/SDULPYzEPXvXhNUvubQi4SfvHEsKuK/Swwp5uXte3hOQuoc+LIWvItIlBp4Pw==",
   "success": true,
-  "projectFilePath": "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos/fileUpload/fileUpload/fileUpload.csproj",
+  "projectFilePath": "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos-ira/fileUpload/fileUpload/fileUpload.csproj",
   "expectedPackageFiles": [
     "/Users/isaias/.nuget/packages/awssdk.core/3.7.2.2/awssdk.core.3.7.2.2.nupkg.sha512",
     "/Users/isaias/.nuget/packages/awssdk.s3/3.7.1.22/awssdk.s3.3.7.1.22.nupkg.sha512",

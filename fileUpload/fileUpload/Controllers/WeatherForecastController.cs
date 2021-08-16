@@ -36,7 +36,8 @@ namespace fileUpload.Controllers
 
         public static AmazonS3Config S3Config = new AmazonS3Config
         {
-            ServiceURL = "s3.private.jp-tok.cloud-object-storage.appdomain.cloud"
+            // ServiceURL = "https://s3.private.jp-tok.cloud-object-storage.appdomain.cloud"
+            ServiceURL = "https://s3.jp-tok.cloud-object-storage.appdomain.cloud"
         };
 
         const string accessKeyId = "b07bdb7f374648da93727ec216015387";
@@ -65,58 +66,51 @@ namespace fileUpload.Controllers
         }
 
         [HttpPost("UploadAttachment")]
-        public ActionResult UploadAttachment(IFormFile formfile)
+        public async Task<ActionResult> UploadAttachment(IFormFile formfile)
         {
             int ret = 0;
             var file = formfile;
 
-            Console.WriteLine("Writing an object");
+            
 
             if (file.Length > 0)
             {
                 foreach (var f in Request.Form.Files)
                 {
-                    var fileName = f.FileName;
-                    var folder = "";
-                    var directory = Path.Combine(_environment.WebRootPath, folder);
-
-                    if (!Directory.Exists(directory))
-                        Directory.CreateDirectory(directory);
-
-                    var fullPath = Path.Combine(_environment.WebRootPath, folder) + $@"\{fileName}";
-
-                    // using (FileStream fs = System.IO.File.Create(fullPath))
-                    // {
-                    //     f.CopyTo(fs);
-                    //     fs.Flush();
-                    // }
+                    
 
                     //-- Add Amazon Object storage here --//
 
-                    AmazonS3Client s3Client = new AmazonS3Client(accessKeyId , secretAccessKey ,S3Config);
+
+                    using (AmazonS3Client s3Client = new AmazonS3Client(accessKeyId , secretAccessKey ,S3Config))
+                    {
+                        Console.WriteLine("Writing an object");
+                        PutObjectRequest objectRequest = new PutObjectRequest()
+                        {
+
+                            FilePath = "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos-ira/fileUpload/fileUpload/test.png",
+                            // ContentBody = "this is a test",
+                            // FilePath = fullPath,
+                            // BucketName = bucketName,
+                            BucketName = "dotnet-icos",
+                            Key = "test.png"
+                        };
+
+                        
+                        await s3Client.PutObjectAsync(objectRequest);
+
+                    }
 
                     //-- End Amazon Object storage here --//
 
-                    PutObjectRequest objectRequest = new PutObjectRequest()
-                    {
-                        // FilePath = "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos/fileUpload/fileUpload/test.png",
-                        ContentBody = "this is a test",
-                        // FilePath = fullPath,
-                        // BucketName = bucketName,
-                        BucketName = "dotnet-icos",
-                        Key = "test"
-                    };
-
-                    
-                    s3Client.PutObjectAsync(objectRequest);
-                    
 
 
                 }
 
             }
-
+            Console.WriteLine("Done");
             return Ok(new { response = ret });
+            // return;
         }
     }
 }

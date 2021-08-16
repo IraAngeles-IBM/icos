@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos/fileUpload/fileUpload/fileUpload.csproj": {}
+    "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos-ira/fileUpload/fileUpload/fileUpload.csproj": {}
   },
   "projects": {
-    "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos/fileUpload/fileUpload/fileUpload.csproj": {
+    "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos-ira/fileUpload/fileUpload/fileUpload.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos/fileUpload/fileUpload/fileUpload.csproj",
+        "projectUniqueName": "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos-ira/fileUpload/fileUpload/fileUpload.csproj",
         "projectName": "fileUpload",
-        "projectPath": "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos/fileUpload/fileUpload/fileUpload.csproj",
+        "projectPath": "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos-ira/fileUpload/fileUpload/fileUpload.csproj",
         "packagesPath": "/Users/isaias/.nuget/packages/",
-        "outputPath": "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos/fileUpload/fileUpload/obj/",
+        "outputPath": "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos-ira/fileUpload/fileUpload/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/isaias/.nuget/NuGet/NuGet.Config"
