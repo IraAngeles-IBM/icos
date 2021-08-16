@@ -78,6 +78,22 @@ namespace fileUpload.Controllers
                 foreach (var f in Request.Form.Files)
                 {
                     
+                    var fileName = f.FileName;
+                    var folder = "";
+                    // var directory = Path.Combine(_environment.WebRootPath, folder);
+                    // var directory = Path.Combine(folder);
+
+                    // if (!Directory.Exists(directory))
+                    //     Directory.CreateDirectory(directory);
+
+                    var fullPath = Path.Combine(_environment.WebRootPath, folder) + $@"\{fileName}";
+                    // var fullPath = Path.Combine(folder) + $@"\{fileName}";
+                    using (FileStream fs = System.IO.File.Create(fullPath))
+                    {
+                        f.CopyTo(fs);
+                        fs.Flush();
+                    }
+
 
                     //-- Add Amazon Object storage here --//
 
@@ -88,12 +104,13 @@ namespace fileUpload.Controllers
                         PutObjectRequest objectRequest = new PutObjectRequest()
                         {
 
-                            FilePath = "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos-ira/fileUpload/fileUpload/test.png",
+                            // FilePath = "/Users/isaias/Documents/Projects/Developer_Advocate_Group/CODE_PATTERNS/icos-ira/fileUpload/fileUpload/test.png",
                             // ContentBody = "this is a test",
-                            // FilePath = fullPath,
+                            FilePath = fullPath,
+                            Key = fileName,
                             // BucketName = bucketName,
                             BucketName = "dotnet-icos",
-                            Key = "test.png"
+                            // Key = "test.png"
                         };
 
                         
