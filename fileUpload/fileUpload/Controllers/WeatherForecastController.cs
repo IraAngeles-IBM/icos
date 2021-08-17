@@ -118,9 +118,8 @@ namespace fileUpload.Controllers
 
                     }
 
-                    //-- End Amazon Object storage here --//
-
-
+                    FileInfo tempFile = new FileInfo(fullPath);
+                    tempFile.Delete();
 
                 }
 
