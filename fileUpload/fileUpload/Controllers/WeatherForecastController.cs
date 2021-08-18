@@ -42,6 +42,7 @@ namespace fileUpload.Controllers
 
         const string accessKeyId = "b07bdb7f374648da93727ec216015387";
         const string secretAccessKey = "564b2e8ab4d2dcc11343ee3d8350a92d0e27ddab7400e5e0";
+        const string keyName = "test.png";
         public static IAmazonS3 s3Client;
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger, IWebHostEnvironment IWebHostEnvironment)
@@ -51,18 +52,45 @@ namespace fileUpload.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<ActionResult> Get()
         {
             var rng = new Random();
-            Console.WriteLine("Get Weather Forecast");
+            int ret = 0;
+            Console.WriteLine("Get file");
 
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+
+            using (AmazonS3Client s3Client = new AmazonS3Client(accessKeyId , secretAccessKey ,S3Config))
             {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+
+
+                // create object request object
+                GetObjectRequest requestDownload = new GetObjectRequest
+                { 
+                BucketName = bucketName, 
+                Key = "test.png"
+                };
+
+                // download physical file
+                using (GetObjectResponse response = await s3Client.GetObjectAsync(requestDownload))
+                {
+                    string dest = Path.Combine(_environment.WebRootPath, "") + $@"\{keyName}";
+                    using (Stream responseStream = response.ResponseStream)
+                    using (FileStream outFile = System.IO.File.Create(dest))
+                    {
+                        responseStream.CopyTo(outFile);
+                    }
+                }
+
+            }
+            Console.WriteLine("Filedownloaded, {0}", keyName);
+            return Ok(new { response = ret });
+            // return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            // {
+            //     Date = DateTime.Now.AddDays(index),
+            //     TemperatureC = rng.Next(-20, 55),
+            //     Summary = Summaries[rng.Next(Summaries.Length)]
+            // })
+            // .ToArray();
         }
 
         [HttpPost("UploadAttachment")]
@@ -128,5 +156,6 @@ namespace fileUpload.Controllers
             return Ok(new { response = ret });
             // return;
         }
+
     }
 }
