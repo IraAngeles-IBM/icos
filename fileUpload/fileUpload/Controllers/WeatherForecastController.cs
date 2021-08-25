@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using System.Text;
 using System.Data;
+using System.Web;
 
 using Amazon;
 using Amazon.S3;
@@ -30,6 +31,18 @@ namespace fileUpload.Controllers
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly IWebHostEnvironment _environment;
 
+        // --- link generator --- //
+
+        const string httpMethod = "GET";
+        const string host = "s3.jp-tok.cloud-object-storage.appdomain.cloud";
+        const string region = "";
+        const string endpoint = "https://" + host;
+        const string bucket = "dotnet-icos";
+        const string objectKey = "Samplepdf.pdf";
+        int expiration = 86400;  // time in seconds
+
+
+
         //-- Add Amazon Object storage here --//
 
         const string bucketName = "dotnet-icos";
@@ -42,7 +55,7 @@ namespace fileUpload.Controllers
 
         const string accessKeyId = "b07bdb7f374648da93727ec216015387";
         const string secretAccessKey = "564b2e8ab4d2dcc11343ee3d8350a92d0e27ddab7400e5e0";
-        const string keyName = "test.png";
+        const string keyName = "Coffee Bag 13.jpg";
         public static IAmazonS3 s3Client;
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger, IWebHostEnvironment IWebHostEnvironment)
@@ -67,7 +80,7 @@ namespace fileUpload.Controllers
                 GetObjectRequest requestDownload = new GetObjectRequest
                 { 
                 BucketName = bucketName, 
-                Key = "test.png"
+                Key = keyName
                 };
 
                 // download physical file
@@ -155,6 +168,87 @@ namespace fileUpload.Controllers
             Console.WriteLine("Done");
             return Ok(new { response = ret });
             // return;
+        }
+
+        [HttpGet("GetLink")]
+        public ActionResult GetLink()
+        {
+            int ret = 0;
+            var time = DateTime.UtcNow;
+            // string timestamp = time.ToString("yyyyMMddHHmmss") + "Z";
+            // string datestamp = time.ToString("yyyyMMdd");
+            const string  timestamp = "20210825T043429Z";
+            const string  datestamp = "20210825";
+
+
+            var standardizedQuerystring = "X-Amz-Algorithm=AWS4-HMAC-SHA256" +
+                "&X-Amz-Credential=" + System.Web.HttpUtility.UrlEncode(accessKeyId + "/" + datestamp + "/" + region + "/s3/aws4_request") +
+                "&X-Amz-Date=" + timestamp +
+                "&X-Amz-Expires=" + expiration.ToString() +
+                "&X-Amz-SignedHeaders=host";
+
+            var standardizedResource = "/" + bucket + "/" + objectKey;
+
+            var payloadHash = "UNSIGNED-PAYLOAD";
+            var standardizedHeaders = "host:" + host;
+            var signedHeaders = "host";
+
+            var standardizedRequest = httpMethod + "\n" +
+                standardizedResource + "\n" +
+                standardizedQuerystring + "\n" +
+                standardizedHeaders + "\n" +
+                "\n" +
+                signedHeaders + "\n" +
+                payloadHash;
+
+            // assemble string-to-sign
+            string hashingAlgorithm = "AWS4-HMAC-SHA256";
+            string credentialScope = datestamp + "/" + region + "/" + "s3" + "/" + "aws4_request";
+            // string sts = hashingAlgorithm + "\n" +
+            //     timestamp + "\n" +
+            //     credentialScope + "\n" +
+            //     Crypto.hashHex(standardizedRequest);
+
+            string sts = hashingAlgorithm + "\n" +
+                timestamp + "\n" +
+                credentialScope + "\n" + "8442242f88793e7a7f5586cf592fd72966599c8489461803ce987b27f648745a";
+                // Crypto.hashHex(standardizedRequest);
+
+
+            // generate the signature
+            byte[] signatureKey = Crypto.createSignatureKey(secretAccessKey, datestamp, region, "s3");
+
+            // string signature = Crypto.hmacHex(signatureKey, sts);
+            // string signature = Crypto.hmacHex(BitConverter.ToString(signatureKey).Replace("-", string.Empty).ToLower(), sts);        
+            string signature = Crypto.hmacHex(signatureKey, sts);
+
+            // create and send the request
+            // the 'requests' package autmatically adds the required 'host' header
+            string requestUrl = endpoint + "/" +
+                bucket + "/" +
+                objectKey + "?" +
+                standardizedQuerystring +
+                "&X-Amz-Signature=" +
+                signature;
+
+
+            Console.WriteLine("Get Link");
+
+
+            // byte[] tempHash = Crypto.hash(secretAccessKey, "test");
+            // Console.WriteLine("Hash value {0}, {1}, {2}", BitConverter.ToString(tempHash).Replace("-", string.Empty).ToLower() , timestamp, datestamp);
+            Console.WriteLine("Request URL = {0}", requestUrl);
+            Console.WriteLine("signatureKey = {0}", BitConverter.ToString(signatureKey).Replace("-", string.Empty).ToLower());
+            Console.WriteLine("signature = {0}", signature);
+             Console.WriteLine("standardizedQuerystring = {0}", standardizedQuerystring);
+            Console.WriteLine("standardizedRequest = {0} \n {1}", standardizedRequest, Crypto.hashHex(standardizedRequest));
+            Console.WriteLine("sts = {0}", sts);
+            Console.WriteLine("\n\nhasHex = {0}", Crypto.hashHex("test"));
+            // Console.WriteLine("\n\nhmacHex = {0}", Crypto.hmacHex(secretAccessKey, "test"));
+
+
+            // Console.WriteLine("\n\nhasHex = {0}", Crypto.hash(secretAccessKey, "test"));
+            return Ok(new { response = ret });
         }
 
     }
