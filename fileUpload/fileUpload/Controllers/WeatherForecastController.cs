@@ -239,7 +239,8 @@ namespace fileUpload.Controllers
 
 
             // Console.WriteLine("\n\nhasHex = {0}", Crypto.hash(secretAccessKey, "test"));
-            return Ok(new { response = ret });
+            // return Ok(new { response = ret });
+            return Ok(new { response = requestUrl });
         }
 
     }
