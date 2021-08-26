@@ -226,16 +226,15 @@ namespace fileUpload.Controllers
 
             Console.WriteLine("Get Link");
 
-
-            // byte[] tempHash = Crypto.hash(secretAccessKey, "test");
-            // Console.WriteLine("Hash value {0}, {1}, {2}", BitConverter.ToString(tempHash).Replace("-", string.Empty).ToLower() , timestamp, datestamp);
             Console.WriteLine("Request URL = {0}", requestUrl);
-            Console.WriteLine("signatureKey = {0}", BitConverter.ToString(signatureKey).Replace("-", string.Empty).ToLower());
-            Console.WriteLine("signature = {0}", signature);
-             Console.WriteLine("standardizedQuerystring = {0}", standardizedQuerystring);
-            Console.WriteLine("standardizedRequest = {0} \n standardizedRequest crypto = {1} \n Length = {2}\n", standardizedRequest, Crypto.hashHex(standardizedRequest), System.Text.ASCIIEncoding.UTF8.GetByteCount(standardizedRequest));
-            Console.WriteLine("sts = {0}", sts);
-            Console.WriteLine("\n\nhasHex = {0}", Crypto.hashHex("test"));
+            // byte[] tempHash = Crypto.hash(secretAccessKey, "test");
+            // Console.WriteLine("Hash value {0}, {1}, {2}", BitConverter.ToString(tempHash).Replace("-", string.Empty).ToLower() , timestamp, datestamp);            
+            // Console.WriteLine("signatureKey = {0}", BitConverter.ToString(signatureKey).Replace("-", string.Empty).ToLower());
+            // Console.WriteLine("signature = {0}", signature);
+            //  Console.WriteLine("standardizedQuerystring = {0}", standardizedQuerystring);
+            // Console.WriteLine("standardizedRequest = {0} \n standardizedRequest crypto = {1} \n Length = {2}\n", standardizedRequest, Crypto.hashHex(standardizedRequest), System.Text.ASCIIEncoding.UTF8.GetByteCount(standardizedRequest));
+            // Console.WriteLine("sts = {0}", sts);
+            // Console.WriteLine("\n\nhasHex = {0}", Crypto.hashHex("test"));
             // Console.WriteLine("\n\nhmacHex = {0}", Crypto.hmacHex(secretAccessKey, "test"));
 
 
