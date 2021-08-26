@@ -175,25 +175,25 @@ namespace fileUpload.Controllers
         {
             int ret = 0;
             var time = DateTime.UtcNow;
-            // string timestamp = time.ToString("yyyyMMddHHmmss") + "Z";
-            // string datestamp = time.ToString("yyyyMMdd");
-            const string  timestamp = "20210825T043429Z";
-            const string  datestamp = "20210825";
+            string timestamp = time.ToString("yyyyMMddTHHmmss") + "Z";
+            string datestamp = time.ToString("yyyyMMdd");
+            // const string  timestamp = "20210826T043429Z";
+            // const string  datestamp = "20210826";
 
 
-            var standardizedQuerystring = "X-Amz-Algorithm=AWS4-HMAC-SHA256" +
-                "&X-Amz-Credential=" + System.Web.HttpUtility.UrlEncode(accessKeyId + "/" + datestamp + "/" + region + "/s3/aws4_request") +
+            string standardizedQuerystring = "X-Amz-Algorithm=AWS4-HMAC-SHA256" +
+                "&X-Amz-Credential=" + System.Uri.EscapeDataString(accessKeyId + "/" + datestamp + "/" + region + "/s3/aws4_request") +
                 "&X-Amz-Date=" + timestamp +
                 "&X-Amz-Expires=" + expiration.ToString() +
                 "&X-Amz-SignedHeaders=host";
 
-            var standardizedResource = "/" + bucket + "/" + objectKey;
+            string standardizedResource = "/" + bucket + "/" + objectKey;
 
-            var payloadHash = "UNSIGNED-PAYLOAD";
-            var standardizedHeaders = "host:" + host;
-            var signedHeaders = "host";
+            string payloadHash = "UNSIGNED-PAYLOAD";
+            string standardizedHeaders = "host:" + host;
+            string signedHeaders = "host";
 
-            var standardizedRequest = httpMethod + "\n" +
+            string standardizedRequest = httpMethod + "\n" +
                 standardizedResource + "\n" +
                 standardizedQuerystring + "\n" +
                 standardizedHeaders + "\n" +
@@ -204,22 +204,14 @@ namespace fileUpload.Controllers
             // assemble string-to-sign
             string hashingAlgorithm = "AWS4-HMAC-SHA256";
             string credentialScope = datestamp + "/" + region + "/" + "s3" + "/" + "aws4_request";
-            // string sts = hashingAlgorithm + "\n" +
-            //     timestamp + "\n" +
-            //     credentialScope + "\n" +
-            //     Crypto.hashHex(standardizedRequest);
-
             string sts = hashingAlgorithm + "\n" +
                 timestamp + "\n" +
-                credentialScope + "\n" + "8442242f88793e7a7f5586cf592fd72966599c8489461803ce987b27f648745a";
-                // Crypto.hashHex(standardizedRequest);
+                credentialScope + "\n" +
+                Crypto.hashHex(standardizedRequest);
 
 
             // generate the signature
             byte[] signatureKey = Crypto.createSignatureKey(secretAccessKey, datestamp, region, "s3");
-
-            // string signature = Crypto.hmacHex(signatureKey, sts);
-            // string signature = Crypto.hmacHex(BitConverter.ToString(signatureKey).Replace("-", string.Empty).ToLower(), sts);        
             string signature = Crypto.hmacHex(signatureKey, sts);
 
             // create and send the request
@@ -241,7 +233,7 @@ namespace fileUpload.Controllers
             Console.WriteLine("signatureKey = {0}", BitConverter.ToString(signatureKey).Replace("-", string.Empty).ToLower());
             Console.WriteLine("signature = {0}", signature);
              Console.WriteLine("standardizedQuerystring = {0}", standardizedQuerystring);
-            Console.WriteLine("standardizedRequest = {0} \n {1}", standardizedRequest, Crypto.hashHex(standardizedRequest));
+            Console.WriteLine("standardizedRequest = {0} \n standardizedRequest crypto = {1} \n Length = {2}\n", standardizedRequest, Crypto.hashHex(standardizedRequest), System.Text.ASCIIEncoding.UTF8.GetByteCount(standardizedRequest));
             Console.WriteLine("sts = {0}", sts);
             Console.WriteLine("\n\nhasHex = {0}", Crypto.hashHex("test"));
             // Console.WriteLine("\n\nhmacHex = {0}", Crypto.hmacHex(secretAccessKey, "test"));
